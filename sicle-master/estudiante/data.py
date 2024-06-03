@@ -1,5 +1,6 @@
 import flet as ft
 import sqlite3
+from sqlite3 import Error
 
 db_name = "sicle.db"
 
@@ -7,8 +8,9 @@ def create_connection(db_name):
     connection = None
     try:
         connection = sqlite3.connect(db_name)
-    except sqlite3.Error as e:
-        print(f"The error '{e}' occurred")
+        print("Conexión a SQLite establecida correctamente.")
+    except Error as e:
+        print(f"Error al conectar a SQLite: {e}")
     return connection
 
 def dataAlumno_view(page: ft.Page):
@@ -21,18 +23,15 @@ def dataAlumno_view(page: ft.Page):
             # Consulta SQL para obtener datos del alumno (usando el ID recibido)
             cursor.execute("SELECT id, apellido_paterno, apellido_materno, nombres, carrera, genero FROM alumnos WHERE id = ?", (id_alumno,))
             alumno_data = cursor.fetchone()
-            if alumno_data:
-                control = str(alumno_data[0])
-                nombreCompleto = str(alumno_data[3]) + " " + str(alumno_data[1])  + " " + str(alumno_data[2])
-                carrera = str(alumno_data[4]) 
-            else:
-                control = nombreCompleto = carrera = "No data"
+            control = str(alumno_data[0])
+            nombreCompleto = f"{alumno_data[3]} {alumno_data[1]} {alumno_data[2]}"
+            carrera = str(alumno_data[4]) 
 
             # Consulta SQL para obtener calificaciones (usando el ID recibido)
-            cursor.execute("SELECT * FROM calificaciones WHERE id_alumno = ?", (id_alumno,))
+            cursor.execute("SELECT modulo, parcial1, parcial2, final FROM calificaciones WHERE id_alumno = ?", (id_alumno,)) 
             grade_data = cursor.fetchall()
 
-        except sqlite3.Error as e:
+        except Error as e:
             print(f"Error al ejecutar las consultas: {e}")
         finally:
             conexiondb.close()
@@ -145,7 +144,7 @@ def dataAlumno_view(page: ft.Page):
                                 ),
                                 ft.DataRow(
                                     cells=[
-                                        ft.DataCell(ft.Text("Extencion: ")),
+                                        ft.DataCell(ft.Text("Extención: ")),
                                         ft.DataCell(ft.Text("(TX) TUX")),
                                     ]
                                 ),
@@ -209,7 +208,6 @@ def dataAlumno_view(page: ft.Page):
                         ft.DataTable(
                             columns=[
                                 ft.DataColumn(ft.Text("Modulo")),
-                                ft.DataColumn(ft.Text("   ")),
                                 ft.DataColumn(ft.Text("Parcial 1")),
                                 ft.DataColumn(ft.Text("Parcial 2")),
                                 ft.DataColumn(ft.Text("Final")),
@@ -217,44 +215,21 @@ def dataAlumno_view(page: ft.Page):
                             rows=[
                                 ft.DataRow(
                                     cells=[
-                                        ft.DataCell(ft.Text(f"Modulo {i}")),
-                                        ft.DataCell(ft.Text("")),
-                                        ft.DataCell(ft.Text("")),
-                                        ft.DataCell(ft.Text("")),
-                                        ft.DataCell(ft.Text("")),
+                                        ft.DataCell(ft.Text(str(grade[0]))),
+                                        ft.DataCell(ft.Text(str(grade[1]))),
+                                        ft.DataCell(ft.Text(str(grade[2]))),
+                                        ft.DataCell(ft.Text(str(grade[3]))),
                                     ]
                                 )
-                                for i in range(1, 6)
+                                for grade in grade_data
                             ],
                             column_spacing=20,
-                        ),
-                        ft.DataTable(
-                            columns=[
-                                ft.DataColumn(ft.Text("Modulo")),
-                                ft.DataColumn(ft.Text("   ")),
-                                ft.DataColumn(ft.Text("Parcial 1")),
-                                ft.DataColumn(ft.Text("Parcial 2")),
-                                ft.DataColumn(ft.Text("Final")),
-                            ],
-                            rows=[
-                                ft.DataRow(
-                                    cells=[
-                                        ft.DataCell(ft.Text(f"Modulo {i}")),
-                                        ft.DataCell(ft.Text("")),
-                                        ft.DataCell(ft.Text("")),
-                                        ft.DataCell(ft.Text("")),
-                                        ft.DataCell(ft.Text("")),
-                                    ]
-                                )
-                                for i in range(6, 11)
-                            ],
-                            column_spacing=20,
-                        ),
+                        )
                     ],
                     alignment=ft.MainAxisAlignment.CENTER,
                 ),
                 ft.Row(
-                    [ft.Text("Calificacion Final: ")],
+                    [ft.Text("Calificación Final: ")],
                     alignment=ft.MainAxisAlignment.CENTER,
                 ),
             ]
@@ -268,4 +243,6 @@ def dataAlumno_view(page: ft.Page):
 
     return ft.View("/estudiante", [barra, bar, menu, calificaciones])
 
+
 ft.app(target=dataAlumno_view, view=ft.AppView.WEB_BROWSER)
+

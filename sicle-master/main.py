@@ -1,6 +1,8 @@
 import flet as ft
 import sqlite3
+from sqlite3 import Error
 
+# Nombre de tu base de datos SQLite
 db_name = "sicle.db"
 session = False
 
@@ -8,8 +10,9 @@ def create_connection(db_name):
     connection = None
     try:
         connection = sqlite3.connect(db_name)
-    except sqlite3.Error as e:
-        print(f"The error '{e}' occurred")
+        print("Conexión a SQLite establecida correctamente.")
+    except Error as e:
+        print(f"Error al conectar a SQLite: {e}")
     return connection
 
 def main(page: ft.Page):
