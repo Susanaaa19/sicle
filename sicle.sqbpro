@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/Susan/OneDrive/Escritorio/sicledb/sicle.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="0"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="125"/><column_width id="3" width="1783"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,7:mainalumnos"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="alumnos" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="79"/><column index="2" value="156"/><column index="3" value="161"/><column index="4" value="109"/><column index="5" value="70"/><column index="6" value="70"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1">-- Base de datos: siclev2
+
+-- Estructura de tabla para la tabla `alumnos`
+CREATE TABLE `alumnos` (
+  `id` INTEGER PRIMARY KEY,
+  `apellido_paterno` TEXT NOT NULL,
+  `apellido_materno` TEXT NOT NULL,
+  `nombres` TEXT NOT NULL,
+  `carrera` TEXT NOT NULL,
+  `genero` TEXT NOT NULL
+);
+
+-- Volcado de datos para la tabla `alumnos`
+INSERT INTO `alumnos` (`id`, `apellido_paterno`, `apellido_materno`, `nombres`, `carrera`, `genero`) VALUES
+(21350265, 'Jorgue', 'Cruz', 'Susana Lizeth', 'ISC', 'F'),
+(21350301, 'Rodriguez', 'Ocampo', 'Victor Axel', 'ISC', 'M');
+
+-- Estructura de tabla para la tabla `calificaciones`
+CREATE TABLE `calificaciones` (
+  `id_alumno` INTEGER NOT NULL,
+  `id_modulo` TEXT NOT NULL,
+  `unidad1` REAL NOT NULL,
+  `unidad2` REAL NOT NULL,
+  `calificacion_final` REAL NOT NULL,
+  PRIMARY KEY (`id_alumno`, `id_modulo`)
+);
+
+-- Volcado de datos para la tabla `calificaciones`
+INSERT INTO `calificaciones` (`id_alumno`, `id_modulo`, `unidad1`, `unidad2`, `calificacion_final`) VALUES
+(21350265, 'V_10', 9.00, 7.00, 80.00),
+(21350301, 'I_10', 7.00, 7.00, 7.00);
+
+-- Estructura de tabla para la tabla `login`
+CREATE TABLE `login` (
+  `id_alumno` INTEGER NOT NULL,
+  `pin` INTEGER NOT NULL,
+  PRIMARY KEY (`id_alumno`)
+);
+
+-- Volcado de datos para la tabla `login`
+INSERT INTO `login` (`id_alumno`, `pin`) VALUES
+(21350301, 4955),
+(21350265, 1909);
+
+-- Estructura de tabla para la tabla `modulos`
+CREATE TABLE `modulos` (
+  `id` TEXT NOT NULL,
+  `nombre` TEXT NOT NULL,
+  `id_profesor` INTEGER NOT NULL,
+  `periodo` TEXT NOT NULL,
+  `ano` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+-- Volcado de datos para la tabla `modulos`
+INSERT INTO `modulos` (`id`, `nombre`, `id_profesor`, `periodo`, `ano`) VALUES
+('I_10', 'Modulo 10', 12, 'E', 2024),
+('V_10', 'Modulo 10', 12, 'E', 2024);
+
+-- Estructura de tabla para la tabla `profesores`
+CREATE TABLE `profesores` (
+  `id` INTEGER PRIMARY KEY,
+  `apellido_paterno` TEXT NOT NULL,
+  `apellido_materno` TEXT NOT NULL,
+  `nombres` TEXT NOT NULL
+);
+
+-- Volcado de datos para la tabla `profesores`
+INSERT INTO `profesores` (`id`, `apellido_paterno`, `apellido_materno`, `nombres`) VALUES
+(12, 'Martinez ', 'Lopez', 'Abigail');
+</sql><current_tab id="0"/></tab_sql></sqlb_project>
